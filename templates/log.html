@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>История запросов</title>
+</head>
+<body>
+<table style="width: 2%;" border="2" cellpadding="2">
+<tbody>{% for row in result %}
+            <tr>{% for col in row%}
+                    {% if col is not integer and '.zip' in col %}
+                        <td><a href="/download/{{col}}">Архив с обработанными данными</a></td>
+                    {% elif col is not integer and '.txt' in col %}
+                        <td><a href="/download/{{col}}">Исходные данные</a></td>
+                    {% else %}
+                        <td>{{col}}</td>
+                    {% endif %}
+                {% endfor %}</tr>
+        {% endfor %}
+<!--<td>{{id|safe}}</td>-->
+<!--<td>{{time|safe}}</td>-->
+<!--<td><a href="{{source|safe}}">Исходные данные</a></td>-->
+<!--<td><a href="{{zip|safe}}">Архив с обработанными данными</a></td>-->
+</tbody>
+</table>
+</body>
+</html>
