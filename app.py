@@ -17,10 +17,10 @@ def auth(func):
     def wrapper(*args, **kwargs):
         if not request.authorization:
             return ('Unauthorized', 401, {'WWW-Authenticate': 'Basic realm="admin"'})
-        if request.authorization and (request.authorization.username != 'user1' or request.authorization.password != '1234'):
+        elif request.authorization and (request.authorization.username != 'user1' or request.authorization.password != '1234'):
             return ('Invalid user', 401, {'WWW-Authenticate': 'Basic realm="admin"'})
         else:
-            print('dec worked')
+            print('auth dec worked')
             return func(*args, **kwargs)
     wrapper.__name__ = func.__name__  # не понял почему нужно менять имя
     return wrapper
