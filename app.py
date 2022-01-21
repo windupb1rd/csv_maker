@@ -13,12 +13,17 @@ def index():     # it is called a view function
     print(url_for('index', _external=True))         # создает путь
     return render_template("index.html")  # шаблоны должны находится в папке templates на этом же уровне
 
-
-# @app.route('/user/<name>')  # вместо name передается произвольный текст
-# def user(name):
-#     menu = ['один', 'два', 'три']
-#     print(url_for('user', name=name))  # работа url_for с динамическими адресами
-#     return render_template("user.html", name=name, menu=menu)
+def auth(func):
+    def wrapper(*args, **kwargs):
+        if not request.authorization:
+            return ('Unauthorized', 401, {'WWW-Authenticate': 'Basic realm="admin"'})
+        if request.authorization and (request.authorization.username != 'user1' or request.authorization.password != '1234'):
+            return ('Invalid user', 401, {'WWW-Authenticate': 'Basic realm="admin"'})
+        else:
+            print('dec worked')
+            return func(*args, **kwargs)
+    wrapper.__name__ = func.__name__  # не понял почему нужно менять имя
+    return wrapper
 
 
 @app.route('/form_csv')
@@ -34,15 +39,16 @@ def paste():
 
 
 @app.route('/download/<filename>')
+@auth
 def download(filename):
     return send_from_directory('files/', f'{filename}')
 
 
 @app.route('/log')
+@auth
 def get_log():
     result = database.select_from_db()
     return render_template('log.html', result=result)
-    # return render_template('log.html', id=result[0][0], time=result[0][1], source=result[0][2], zip=result[0][3])
 
 
 # app.add_url_rule('/', 'index', index)  # способ вызова функций без декоратора
