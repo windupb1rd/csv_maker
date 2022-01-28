@@ -39,7 +39,6 @@ def paste():
 
 
 @app.route('/download/<filename>')
-@auth
 def download(filename):
     return send_from_directory('files/', f'{filename}')
 
