@@ -7,6 +7,9 @@ def start_making_csv_from_web(data):  # строки подаются через
     f = sorted(set(data.splitlines()))
     path_to_output_files = 'files/output'
 
+    if not os.path.exists('files'):
+        os.system(f'mkdir files')
+
     if os.path.exists(path_to_output_files):
         os.system(f'rm -r {path_to_output_files}')
         os.system(f'mkdir {path_to_output_files}')
