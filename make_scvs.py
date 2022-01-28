@@ -3,7 +3,7 @@ import datetime
 import database
 
 
-def start_making_csv_from_web(data):  # строки подаются через браузер, на выходе скачиваются файлы в зип архиве
+def start_making_csv_from_web(data, number):  # строки подаются через браузер, на выходе скачиваются файлы в зип архиве
     f = sorted(set(data.splitlines()))
     path_to_output_files = 'files/output'
 
@@ -22,14 +22,14 @@ def start_making_csv_from_web(data):  # строки подаются через
     source_query_file.write(data)
     source_query_file.close()
 
-    number_of_output_files = (len(f) // 40) + 1 if len(f) % 40 != 0 else len(f) // 40
-    cut_left, cut_right = 0, 40
+    number_of_output_files = (len(f) // number) + 1 if len(f) % number != 0 else len(f) // number
+    cut_left, cut_right = 0, number
     for file_number in range(1, number_of_output_files + 1):
         output = open(f'files/output/output{file_number}.csv', 'w')
         output.write(','.join(f[cut_left:cut_right]))
         output.close()
-        cut_left += 40
-        cut_right += 40 if len(f) >= 40 * file_number else (len(f) - (40 * file_number))
+        cut_left += number
+        cut_right += number if len(f) >= number * file_number else (len(f) - (number * file_number))
 
         os.system(f'cd {path_to_output_files}')
         os.system(f"7z a -tzip files/{filename}.zip ./{path_to_output_files}/*")  # точка в начале пути не включает дерево каталогов в архив

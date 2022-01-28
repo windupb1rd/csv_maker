@@ -34,7 +34,9 @@ def form_csv():
 @app.route('/paste', methods=['POST', 'GET'])  # метод POST обязательно явно указывать
 def paste():
     data = request.form['userdata']
-    result = make_scvs.start_making_csv_from_web(data)
+    number = request.form['number_of_entries_in_one_file']
+    result = make_scvs.start_making_csv_from_web(data, int(number))
+    print(number)
     return render_template('paste.html', result=result[2], filename=f'{result[0]}.zip')
 
 
